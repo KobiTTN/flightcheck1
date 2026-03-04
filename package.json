@@ -1,0 +1,13 @@
+{
+  "name": "flightcheck",
+  "version": "1.0.0",
+  "description": "Flight status checker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node -r dotenv/config server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0"
+  }
+}
