@@ -822,12 +822,18 @@
         dep: {
           iata: f.departure?.airport?.iata || '—',
           city: f.departure?.airport?.name || '—',
-          time: f.departure?.scheduledTime?.local?.slice(11,16) || f.departure?.scheduledTime?.utc?.slice(11,16) || '—',
+          time: (f.departure?.revisedTime?.local || f.departure?.scheduledTime?.local)?.slice(11,16)
+             || (f.departure?.revisedTime?.utc  || f.departure?.scheduledTime?.utc)?.slice(11,16) || '—',
+          scheduledTime: f.departure?.scheduledTime?.local?.slice(11,16) || f.departure?.scheduledTime?.utc?.slice(11,16) || null,
+          isRevised: !!f.departure?.revisedTime,
         },
         arr: {
           iata: f.arrival?.airport?.iata || '—',
           city: f.arrival?.airport?.name || '—',
-          time: f.arrival?.scheduledTime?.local?.slice(11,16) || f.arrival?.scheduledTime?.utc?.slice(11,16) || '—',
+          time: (f.arrival?.revisedTime?.local || f.arrival?.scheduledTime?.local)?.slice(11,16)
+             || (f.arrival?.revisedTime?.utc  || f.arrival?.scheduledTime?.utc)?.slice(11,16) || '—',
+          scheduledTime: f.arrival?.scheduledTime?.local?.slice(11,16) || f.arrival?.scheduledTime?.utc?.slice(11,16) || null,
+          isRevised: !!f.arrival?.revisedTime,
         },
         airline: f.airline?.name || '—',
         terminal: f.departure?.terminal || '—',
@@ -863,10 +869,14 @@
 
     document.getElementById('depIata').textContent = data.dep.iata;
     document.getElementById('depCity').textContent = data.dep.city;
-    document.getElementById('depTime').textContent = data.dep.time;
+    document.getElementById('depTime').innerHTML = data.dep.isRevised && data.dep.scheduledTime
+      ? data.dep.time + ' <span style="text-decoration:line-through;opacity:0.4;font-size:14px">' + data.dep.scheduledTime + '</span>'
+      : data.dep.time;
     document.getElementById('arrIata').textContent = data.arr.iata;
     document.getElementById('arrCity').textContent = data.arr.city;
-    document.getElementById('arrTime').textContent = data.arr.time;
+    document.getElementById('arrTime').innerHTML = data.arr.isRevised && data.arr.scheduledTime
+      ? data.arr.time + ' <span style="text-decoration:line-through;opacity:0.4;font-size:14px">' + data.arr.scheduledTime + '</span>'
+      : data.arr.time;
     document.getElementById('duration').textContent = data.duration;
 
     document.getElementById('airline').textContent = data.airline;
